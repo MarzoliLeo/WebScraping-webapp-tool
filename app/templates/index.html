@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WebScraper – Minimal</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>WebScraper</h1>
+    <p>Inserisci l'URL di una pagina (es. un ristorante su TripAdvisor) per estrarre i contatti. L'output è JSON.</p>
+
+    <form id="scrapeForm" method="post" action="/scrape">
+      <label>URL</label>
+      <input type="url" name="url" placeholder="https://..." required />
+      <div class="row">
+        <label><input type="checkbox" name="use_browser" checked /> Headless fallback</label>
+        <label><input type="checkbox" name="respect_robots" checked /> Rispetta robots.txt</label>
+      </div>
+      <label>Max wait (ms)</label>
+      <input type="number" name="max_wait_ms" value="2000" min="500" max="10000" />
+      <button type="submit">Scrape</button>
+    </form>
+
+    {% if result_json %}
+    <section class="result">
+      <h2>Risultato</h2>
+      <pre>{{ result_json | safe }}</pre>
+      <a class="download" href="/download.json?url={{ form_url }}&use_browser={{ form_use_browser }}&max_wait_ms={{ form_max_wait_ms }}&respect_robots={{ form_respect_robots }}">Scarica JSON</a>
+      <a class="download" href="/download.xlsx?url={{ form_url }}&use_browser={{ form_use_browser }}&max_wait_ms={{ form_max_wait_ms }}&respect_robots={{ form_respect_robots }}">Scarica Excel</a>
+    </section>
+    {% endif %}
+
+
+
+    <footer>
+      <small>Consiglio: per ridurre i blocchi attiva un proxy (variabili ambiente <code>HTTP_PROXY</code>/<code>HTTPS_PROXY</code>) e usa ritardi casuali.</small>
+    </footer>
+  </main>
+</body>
+</html>
